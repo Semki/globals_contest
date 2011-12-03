@@ -150,7 +150,8 @@ public class DataFinder {
 			String strKey = node.nextSubscript(key);
 			if (strKey.equals(""))
 				break;
-			results.add(Long.parseLong(strKey));
+			key = Long.parseLong(strKey);
+			results.add(key);
 		}
 		
 		return results;

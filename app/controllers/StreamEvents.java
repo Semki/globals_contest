@@ -60,36 +60,18 @@ public class StreamEvents extends Controller {
 			{
 				
 				//finder = new DataFinder(ClickStreamEvent.class).Where(obj.get("field").toString(), ConditionTypes.Equals, obj.get("fieldValue").toString());
-				
 				finder = new DataFinder(ClickStreamEvent.class);
-				
 				boolean notEnd;
 				ClickStreamEvent event = null; 
 				JsonObject element = null;
 				LogWriter log = new LogWriter();
-				
 				while (true) 
 				{
-					event = new ClickStreamEvent();
-					event.Name = "Test1";
-					event.CreatedOn = new Date();
-					event.elementType = "Button";
+					event = (ClickStreamEvent) finder.Next();
+					log.WriteToFile("Test", true);
+					if (event == null)
+						break;
 					array.add(event);
-					
-					
-					event = new ClickStreamEvent();
-					event.Name = "Test2";
-					event.CreatedOn = new Date();
-					event.elementType = "Div";
-					array.add(event);
-					
-					break;
-					
-					//event = (ClickStreamEvent) finder.Next();
-					//log.WriteToFile("Test", true);
-					//if (event == null)
-					//	break;
-					//array.add(event);
 				} 
 			
 			} catch (Exception e) {

@@ -209,9 +209,6 @@ public class DataWorker {
         else
         {
         	oldObj = LoadObjectById(obj.Id, obj);
-        	//node.setSubscriptCount(0);
-        	//znode .setSubscriptCount((int)obj.Id);
-            //node.appendSubscript(obj.Id);
         }
         
         Class info = obj.getClass();
@@ -259,28 +256,8 @@ public class DataWorker {
             {
                field = fieldsMap.get(subscript);
                nodeValue = node.getObject(subscript);
-               
+               System.out.println("obj is "+obj+" field is "+field + "nodevalue is " + nodeValue+ " subscript is " + subscript + " node is "+ node);
                FieldGetter.GetFieldValue(obj, field, nodeValue, subscript, node);
-               /*
-               if (nodeValue instanceof java.lang.Long)
-               {
-                   Long nodeLongValue = node.getLong(subscript);
-                   field.setLong(obj, nodeLongValue);
-               }
-               else
-               {
-                   if(field.getType() == java.util.Date.class)
-                   {
-                       Date dateValue = new Date(nodeValue.toString());
-                        
-                        field.set(obj, dateValue);
-                   }
-                   else
-                    {
-                   
-                        field.set(obj, nodeValue);
-                    }
-               }*/
             }
          }while (subscript.length() > 0);
          

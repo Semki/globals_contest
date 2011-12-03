@@ -9,8 +9,12 @@ public class FieldGetter {
     public static void GetFieldValue(Persistent obj, Field field, Object nodeValue, String subscript, NodeReference node)
     {
     	Object fieldAsObj = null;
+    	/// Если поле - для устаревшего объекта.
+    	if (obj == null || field == null)
+    		return;
+    	
     	try {
-				fieldAsObj = field.get(obj);
+    			fieldAsObj = field.get(obj);
 				if (Persistent.class.isAssignableFrom(field.getType()))
 				{
 					Persistent fieldAsPersistentObject;
