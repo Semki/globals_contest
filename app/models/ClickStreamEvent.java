@@ -11,6 +11,6 @@ public class ClickStreamEvent extends Persistent {
 	public String elementClass;
 	public String timeStamp;
 	
-	public String SessionId;
+	public String sessionId;
 	
 }
