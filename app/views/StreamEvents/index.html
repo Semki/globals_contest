@@ -3,10 +3,80 @@
 
 #{set 'moreScripts'}
     #{script 'streamEvents.js' /}
+    #{script 'jquery.timePicker.min.js' /}
+    #{script 'jquery-ui-1.8.16.custom.min.js' /}
 #{/set}
+
+#{set 'moreStyles'}
+	#{stylesheet 'timePicker.css' /}
+	#{stylesheet 'jquery-ui-1.8.16.custom.css' /}
+#{/set}
+
+<!--
+public String eventType;
+	public String elementType;
+	public String mouseX;
+	public String mouseY;
+	public String elementId;
+	public String elementClass;
+	public String timeStamp;
+	
+	public String sessionId; 
+ -->
 
 
 <h1>Here will be list of events</h1>
+
+<table>
+<tr>
+<td>
+	<form id="filter">
+		<fieldset>
+			<div class="clearfix">
+				<label for="element_type">Element type</label>
+				<div class="input">
+					<input class="span2 filter_field" id="element_type" name="element_type" type="text" />
+				</div>
+			</div>
+			<!--  
+			<div class="clearfix">
+				<label for="element_id">Element Id</label>
+				<div class="input">
+				<input class="span2"  type="text" id="time2" size="10" value="12.00 PM" autocomplete="OFF">
+				<input type="text" id="datepicker" class="hasDatepicker">
+				</div>
+			</div>
+			-->
+		</fieldset>
+	</form>
+</td>
+<td>
+	<form id="filter">
+	<fieldset>
+		<div class="clearfix">
+			<label for="element_id">Element Id</label>
+			<div class="input">
+				<input class="span4 filter_field" id="element_id" name="element_id" type="text" />
+			</div>
+		</div>
+		<div class="clearfix">
+			<label for="element_type">Element class</label>
+			<div class="input">
+				<input class="span4 filter_field" id="element_class" name="element_class" type="text" />
+			</div>
+		</div>
+	
+	</fieldset>
+</form>
+</td>
+</tr>
+<tr>
+<td><button id="apply_filter" class="btn primary">Apply</button></td>
+<td></td>
+</tr>
+</table>
+
+
 
 <table id="events_table">
 	<tr>
