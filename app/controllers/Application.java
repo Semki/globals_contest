@@ -2,6 +2,7 @@ package controllers;
 
 import play.*;
 import play.mvc.*;
+import play.mvc.Scope.Session;
 
 import java.util.*;
 
@@ -26,9 +27,10 @@ public class Application extends Controller {
     		// add error message
     		return;
     	}
-    	
+    	e.SessionId = Session.current().getId();
+   
     	e.Save(); 
-    }
+    } 
   
     public static void handleJson(JsonObject body) 
     {        
