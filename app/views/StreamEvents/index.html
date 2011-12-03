@@ -3,13 +3,16 @@
 
 #{set 'moreScripts'}
     #{script 'streamEvents.js' /}
-    #{script 'jquery.timePicker.min.js' /}
     #{script 'jquery-ui-1.8.16.custom.min.js' /}
+    #{script 'jquery-ui-timepicker-addon.js' /}
+
+    
 #{/set}
 
 #{set 'moreStyles'}
-	#{stylesheet 'timePicker.css' /}
 	#{stylesheet 'jquery-ui-1.8.16.custom.css' /}
+	#{stylesheet 'jquery-ui-timepicker-addon.css' /}
+	
 #{/set}
 
 <!--
@@ -38,15 +41,23 @@ public String eventType;
 					<input class="span2 filter_field" id="element_type" name="element_type" type="text" />
 				</div>
 			</div>
-			<!--  
+			
 			<div class="clearfix">
-				<label for="element_id">Element Id</label>
+				<label>Created at from</label>
 				<div class="input">
-				<input class="span2"  type="text" id="time2" size="10" value="12.00 PM" autocomplete="OFF">
-				<input type="text" id="datepicker" class="hasDatepicker">
+					<input type="text" id="datepicker1" value="" />
+					
 				</div>
 			</div>
-			-->
+					<div class="clearfix">
+				<label>Created at to</label>
+				<div class="input">
+					<input type="text" id="datepicker2" value="" />
+					
+				
+				</div>
+			</div>
+			
 		</fieldset>
 	</form>
 </td>
