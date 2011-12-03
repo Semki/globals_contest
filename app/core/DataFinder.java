@@ -19,7 +19,28 @@ public class DataFinder {
 	
 	int currentPosition = 0;
 	
-	HashMap<String, String> conditions = new HashMap<String, String>();
+	ArrayList<ConditionItem> conditions = new ArrayList<ConditionItem>();
+	
+	public enum	ConditionTypes {
+		Equals,
+		GreaterThen,
+		LessThen,
+		GreaterOrEqual,
+		LessOrEqual;
+	}
+	
+	private class ConditionItem
+	{
+		String field;
+		ConditionTypes condition;
+		String value;
+		
+		public ConditionItem(String field, ConditionTypes condition, String value) {
+			this.field = field;
+			this.condition = condition;
+			this.value = value;
+		}
+	}
 	
 	public DataFinder(Class searchClass) throws IllegalArgumentException {
 		if (searchClass.getGenericSuperclass() != Persistent.class)
@@ -45,33 +66,51 @@ public class DataFinder {
 		return obj;
 	}
 	
-	public DataFinder Where(String field, Object value) throws NoSuchFieldException, SecurityException
+	void addCondition(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
 	{
 		Field searchField = searchClass.getField(field);
 		Index annotation = searchField.getAnnotation(Index.class);
 		if (annotation == null)
 			throw new IllegalArgumentException(field);
 		
-		conditions.put(annotation.IndexName(), DataWorker.ConvertValueForIndexing(value));
-		
+		conditions.add(new ConditionItem(annotation.IndexName(), condition, DataWorker.ConvertValueForIndexing(value)));
+	}
+	
+	public DataFinder Where(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
+	{
+		addCondition(field, condition, value);
 		return this;
 	}
 	
 	private void initSearch()
 	{
-		for (Map.Entry<String, String> entry: conditions.entrySet())
+		for (ConditionItem item : conditions)
 		{
-			ArrayList<Long> conditionIds = generateIdsForCondition(entry.getKey(), entry.getValue());
+			ArrayList<Long> conditionIds = generateIdsForCondition(item);
 			intersect(conditionIds);
 		}
 	}
 	
-	private ArrayList<Long> generateIdsForCondition(String indexName, String value)
+	private ArrayList<Long> generateIdsForCondition(ConditionItem conditionItem)
 	{
-		ArrayList<Long> results = new ArrayList<Long>();
-		
 		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
 		
+		switch (conditionItem.condition) {
+		case Equals:
+			return generateIdsForEquals(node, conditionItem.field, conditionItem.value);
+		case LessOrEqual:
+		case LessThen:
+		case GreaterThen:
+		case GreaterOrEqual:
+			return generateIdsForCompare(node, conditionItem.field, conditionItem.value, conditionItem.condition);
+		default:
+			return new ArrayList<Long>();
+		}
+	}
+	
+	private ArrayList<Long> generateIdsForEquals(NodeReference node, String indexName, String value)
+	{
+		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
 		while (true)
 		{
@@ -85,6 +124,50 @@ public class DataFinder {
 				
 			results.add(parsedKey);
 		}
+		return results;
+	}
+	
+	private ArrayList<Long> generateIdsForCompare(NodeReference node, String indexName, String value, ConditionTypes condition)
+	{
+		ArrayList<Long> results = new ArrayList<Long>();
+		
+		String fieldKey = value;
+		while (true)
+		{
+			switch (condition)
+			{
+			case GreaterThen:
+			case LessThen:
+				if (fieldKey.equals(value))
+					if (condition == ConditionTypes.LessThen)
+						fieldKey = node.previousSubscript(indexName, fieldKey);
+					else
+						fieldKey = node.nextSubscript(indexName, fieldKey);
+			}
+			
+			if (fieldKey.equals(""))
+				break;
+			
+			String key = "";
+			while (true)
+			{
+				key = node.nextSubscript(indexName, fieldKey, key);
+				if (key.equals(""))
+					break;
+				
+				Long parsedKey = Long.parseLong(key);
+				if (ids != null && !ids.contains(parsedKey))
+					continue;
+					
+				results.add(parsedKey);
+			}
+			
+			if (condition == ConditionTypes.LessThen || condition == ConditionTypes.LessOrEqual)
+				fieldKey = node.previousSubscript(indexName, fieldKey);
+			else
+				fieldKey = node.nextSubscript(indexName, fieldKey);
+		}
+		
 		return results;
 	}
 	
