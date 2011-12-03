@@ -3,6 +3,12 @@ $(document).ready(function() {
 		e.stopPropagation();
 		
 		var c = e.currentTarget;
+		
+		// Don't fetch elements without class name and id
+		if ((c.id == "") && (c.className == ""))
+		{
+			return;
+		}
 		var eventObject = {"eventType": "click", 
 				           "elementType": c.tagName, 
 				           "mouseX": e.pageX, 
