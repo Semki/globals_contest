@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /                                       StreamEvents.index
 
 POST /addEvent	Application.addEvent
 
