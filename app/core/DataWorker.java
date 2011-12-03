@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method; 
 import com.intersys.globals.NodeReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,11 @@ public class DataWorker {
     	return persistentClass.getSimpleName().concat("I");
     }
     
+    public static String GetDataGlobalName(Class persistentClass)
+    {
+    	return persistentClass.getSimpleName().concat("D");
+    }
+    
     public static NodeReference GetNodeReference(String nodeName)
     {
     	return Instance().connection.createNodeReference(nodeName);
@@ -55,11 +61,6 @@ public class DataWorker {
     
     public void UpdateIndicesOnCreate(Persistent obj)
     {
-    }
-    
-    private void UpdateIndexForField(Persistent obj, Field field) throws IllegalAccessException
-    {
-    	UpdateIndexForField(obj, field, null);
     }
     
     private void UpdateIndexForField(Persistent obj, Field field, Persistent oldObj) 
@@ -92,7 +93,7 @@ public class DataWorker {
         	Object oldVal = field.get(oldObj);
         	if (oldVal != null)
         	{
-        		String val = ConvertValueForIndexing(oldVal);
+        		Object val = ConvertValueForIndexing(oldVal);
 	        	if (node.exists(indexName, val, oldObj.Id))
 	        		node.kill(indexName, val, oldObj.Id);
         	}
@@ -103,24 +104,31 @@ public class DataWorker {
         	Object newVal = field.get(obj);
         	if (newVal != null)
         	{
-        		String val = ConvertValueForIndexing(newVal);
+        		Object val = ConvertValueForIndexing(newVal);
         		if (!node.exists(indexName, val, obj.Id))
         			node.set("", indexName, val, obj.Id);
         	}
         }
     }
     
-    public static String ConvertValueForIndexing(Object value)
+    public static Object ConvertValueForIndexing(Object value)
     {
     	if (value instanceof String)
-    		return " " + value.toString().toUpperCase();
+    	{
+    		String str = " " + value.toString().toUpperCase();
+    		if (str.length() > 500)
+    			return str.substring(0, 500);
+    		return str;
+    	}
     	else if (value instanceof Date)
     	{
+    		Date val = (Date) value;
+    		//Calendar calend = val. 
     		return value.toString();
     	}
     	else
     	{
-    		return value.toString();
+    		return value;
     	}
     }
     

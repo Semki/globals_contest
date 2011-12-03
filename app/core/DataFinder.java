@@ -19,6 +19,8 @@ public class DataFinder {
 	
 	int currentPosition = 0;
 	
+	int top = -1;
+	
 	ArrayList<ConditionItem> conditions = new ArrayList<ConditionItem>();
 	
 	public enum	ConditionTypes {
@@ -33,9 +35,9 @@ public class DataFinder {
 	{
 		String field;
 		ConditionTypes condition;
-		String value;
+		Object value;
 		
-		public ConditionItem(String field, ConditionTypes condition, String value) {
+		public ConditionItem(String field, ConditionTypes condition, Object value) {
 			this.field = field;
 			this.condition = condition;
 			this.value = value;
@@ -56,6 +58,9 @@ public class DataFinder {
 			initSearch();
 		
 		if (currentPosition >= ids.size())
+			return null;
+		
+		if (top > 0 && currentPosition >= top)
 			return null;
 		
 		Persistent obj = (Persistent) (searchClass.newInstance());
@@ -82,13 +87,40 @@ public class DataFinder {
 		return this;
 	}
 	
+	public DataFinder Top(int top)
+	{
+		this.top = top;
+		return this;
+	}
+	
 	private void initSearch()
 	{
+		if (conditions.size() == 0)
+		{
+			ids = generateFullIds();
+			return;
+		}
 		for (ConditionItem item : conditions)
 		{
 			ArrayList<Long> conditionIds = generateIdsForCondition(item);
 			intersect(conditionIds);
 		}
+	}
+	
+	private ArrayList<Long> generateFullIds()
+	{
+		ArrayList<Long> results = new ArrayList<Long>();
+		NodeReference node = DataWorker.GetNodeReference(DataWorker.GetDataGlobalName(searchClass));
+		Long key = (long)0;
+		while (true)
+		{
+			String strKey = node.nextSubscript(key);
+			if (strKey.equals(""))
+				break;
+			results.add(Long.parseLong(strKey));
+		}
+		
+		return results;
 	}
 	
 	private ArrayList<Long> generateIdsForCondition(ConditionItem conditionItem)
@@ -108,7 +140,7 @@ public class DataFinder {
 		}
 	}
 	
-	private ArrayList<Long> generateIdsForEquals(NodeReference node, String indexName, String value)
+	private ArrayList<Long> generateIdsForEquals(NodeReference node, String indexName, Object value)
 	{
 		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
@@ -127,11 +159,11 @@ public class DataFinder {
 		return results;
 	}
 	
-	private ArrayList<Long> generateIdsForCompare(NodeReference node, String indexName, String value, ConditionTypes condition)
+	private ArrayList<Long> generateIdsForCompare(NodeReference node, String indexName, Object value, ConditionTypes condition)
 	{
 		ArrayList<Long> results = new ArrayList<Long>();
 		
-		String fieldKey = value;
+		Object fieldKey = value;
 		while (true)
 		{
 			switch (condition)
@@ -187,5 +219,7 @@ public class DataFinder {
 			}
 		}
 	}
+	
+	
 
 }

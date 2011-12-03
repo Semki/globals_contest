@@ -4,16 +4,13 @@ public class Persistent {
 	
     public String GetStorageGlobalName()
     {
-    	String name = this.getClass().getSimpleName();
-    	name =  name.concat("D");
-    	return name;
+    	return DataWorker.GetDataGlobalName(this.getClass());
     }
  
     public String GetIndexGlobalName()
     {
     	return DataWorker.GetIndexGlobalName(this.getClass());
     }
-    
     
     public long Id = 0;
     
