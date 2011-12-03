@@ -93,13 +93,24 @@ public class DataFinder {
 		if (annotation == null)
 			throw new IllegalArgumentException(field);
 		
+		System.out.println("val = " + value.toString() + " index " + DataWorker.ConvertValueForIndexing(value));
 		conditions.add(new ConditionItem(annotation.IndexName(), condition, DataWorker.ConvertValueForIndexing(value)));
+	}
+	
+	public DataFinder Where(String field, Object value) throws NoSuchFieldException, SecurityException
+	{ 
+		return Where(field, ConditionTypes.Equals, value);
 	}
 	
 	public DataFinder Where(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
 	{
 		addCondition(field, condition, value);
 		return this;
+	}
+	
+	public int Count()
+	{
+		return ids.size();
 	}
 	
 	public DataFinder Top(int top)
@@ -113,16 +124,19 @@ public class DataFinder {
 		if (conditions.size() == 0)
 		{
 			ids = generateFullIds();
-			return;
+			//return;
 		}
-		for (ConditionItem item : conditions)
+		else
 		{
-			ArrayList<Long> conditionIds = generateIdsForCondition(item);
-			intersect(conditionIds);
+			for (ConditionItem item : conditions)
+			{
+				ArrayList<Long> conditionIds = generateIdsForCondition(item);
+				intersect(conditionIds);
+			}
 		}
-		
 		if (order == OrderById.Asc)
 		{
+			
 			Collections.sort(ids, new Comparator<Long>() {
 				public int compare(Long o1, Long o2) {
 					return o1.compareTo(o2);
@@ -131,6 +145,7 @@ public class DataFinder {
 		}
 		else
 		{
+			
 			Collections.sort(ids, new Comparator<Long>() {
 				public int compare(Long o1, Long o2) {
 					return o2.compareTo(o1);
@@ -178,6 +193,7 @@ public class DataFinder {
 	{
 		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
+		System.out.println(value.toString());
 		while (true)
 		{
 			key = node.nextSubscript(indexName, value, key);

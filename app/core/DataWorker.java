@@ -115,7 +115,10 @@ public class DataWorker {
     {
     	if (value instanceof String)
     	{
-    		String str = " " + value.toString().toUpperCase();
+    		//System.out.println(">"+value.toString().toUpperCase()+"<");
+    		
+    		String str = " ".concat(value.toString().toUpperCase());
+    		//System.out.println(">"+str+"<");
     		if (str.length() > 500)
     			return str.substring(0, 500);
     		return str;
@@ -256,7 +259,7 @@ public class DataWorker {
             {
                field = fieldsMap.get(subscript);
                nodeValue = node.getObject(subscript);
-               System.out.println("obj is "+obj+" field is "+field + "nodevalue is " + nodeValue+ " subscript is " + subscript + " node is "+ node);
+               //System.out.println("obj is "+obj+" field is "+field + "nodevalue is " + nodeValue+ " subscript is " + subscript + " node is "+ node);
                FieldGetter.GetFieldValue(obj, field, nodeValue, subscript, node);
             }
          }while (subscript.length() > 0);

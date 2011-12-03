@@ -7,7 +7,7 @@ $(document).ready(function () {
 	$("#datepicker2").datetimepicker({dateFormat: 'yy-mm-dd'});
 	
 	
-	requestData(null);
+	requestData({});
 	
 	$("#apply_filter").click(function () {
 		var filter = {"elementType": $('#element_type').val(), "elementId": $('#element_id').val(), "elementClass": $('#element_class').val(),

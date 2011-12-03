@@ -48,38 +48,52 @@ public class StreamEvents extends Controller {
 		return e; 
 	}
 	
-	
-	public static void Find(JsonObject obj)
+	public static void Find(JsonObject body)
 	{
-	
+		
+		JsonObject obj = body;
+		//System.out.println("body = "+ body + "obj " + obj);
 		ArrayList<ClickStreamEvent> array = new ArrayList<ClickStreamEvent>();
-		
-		
-			DataFinder finder;
-			try 
-			{
-				
-				//finder = new DataFinder(ClickStreamEvent.class).Where(obj.get("field").toString(), ConditionTypes.Equals, obj.get("fieldValue").toString());
-				finder = new DataFinder(ClickStreamEvent.class);
-				boolean notEnd;
-				ClickStreamEvent event = null; 
-				JsonObject element = null;
-				LogWriter log = new LogWriter();
-				while (true) 
-				{
-					event = (ClickStreamEvent) finder.Next();
-					log.WriteToFile("Test", true);
-					if (event == null)
-						break;
-					array.add(event);
-				} 
+		DataFinder finder = null;
+		try 
+		{
+			//System.out.println("obi is arr = "+ obj.isJsonArray()+ " and is obj " + obj.isJsonObject());
 			
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!obj.isJsonObject())
+				return;
+			
+			if (obj.get("elementType") != null)
+			{
+					
+					finder = new DataFinder(ClickStreamEvent.class).Where("elementType", ConditionTypes.Equals, obj.get("elementType").getAsString());
+					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+			}
+			else
+			{
+				//System.out.println("NULL");
+				finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
+			}
+			
+			ClickStreamEvent event = null;
+			while (true) 
+			{
+				event = (ClickStreamEvent) finder.Next();
+				if (event == null)
+					break;
+				array.add(event);
 			} 
 		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		
+		if (array.size() == 0)
+		{
+		
+			renderJSON("[]");
+			return;
+		}
 		renderJSON(array);
 		
 	}

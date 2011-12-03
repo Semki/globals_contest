@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                                       StreamEvents.index
-POST	/	StreamEvents.Find
+POST /find		StreamEvents.Find
 
 POST /addEvent	StreamEvents.addEvent
 
