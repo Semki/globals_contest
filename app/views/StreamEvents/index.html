@@ -1,4 +1,17 @@
 #{extends 'main.html' /}
 #{set title:'Clickstream events list' /}
 
+#{set 'moreScripts'}
+    #{script 'streamEvents.js' /}
+#{/set}
+
+
 <h1>Here will be list of events</h1>
+
+<table id="events_table">
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Created at</th>
+	</tr>
+</table>
