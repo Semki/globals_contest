@@ -88,6 +88,7 @@ public class DataFinder {
 	
 	void addCondition(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
 	{
+		System.out.println("FIELD "+field);
 		Field searchField = searchClass.getField(field);
 		Index annotation = searchField.getAnnotation(Index.class);
 		if (annotation == null)

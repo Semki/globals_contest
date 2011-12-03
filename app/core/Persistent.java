@@ -14,8 +14,10 @@ public class Persistent {
     
     public long Id = 0;
     
+    @Index(IndexName="NameIndex")
     public String Name = "";
    
+    @Index(IndexName="CreatedOnIndex")
     public Date CreatedOn = new Date();
     
     public String toString()

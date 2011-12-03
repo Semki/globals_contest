@@ -54,7 +54,7 @@ public class StreamEvents extends Controller {
 		JsonObject obj = body;
 		//System.out.println("body = "+ body + "obj " + obj);
 		ArrayList<ClickStreamEvent> array = new ArrayList<ClickStreamEvent>();
-		DataFinder finder = null;
+		DataFinder finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
 		try 
 		{
 			//System.out.println("obi is arr = "+ obj.isJsonArray()+ " and is obj " + obj.isJsonObject());
@@ -62,17 +62,43 @@ public class StreamEvents extends Controller {
 			if (!obj.isJsonObject())
 				return;
 			
+			Boolean found = false;
 			if (obj.get("elementType") != null)
 			{
 					
-					finder = new DataFinder(ClickStreamEvent.class).Where("elementType", ConditionTypes.Equals, obj.get("elementType").getAsString());
+					finder = finder.Where("elementType", ConditionTypes.Equals, obj.get("elementType").getAsString());
 					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
 			}
-			else
+			
+			if (obj.get("elementId") != null)
 			{
-				//System.out.println("NULL");
-				finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
+					
+					finder = finder.Where("elementId", ConditionTypes.Equals, obj.get("elementId").getAsString());
+					System.out.println("obj.get('elementId').toString() "+ obj.get("elementId").toString());
 			}
+			
+			if (obj.get("elementClass") != null)
+			{
+					
+					finder = finder.Where("elementClass", ConditionTypes.Equals, obj.get("elementClass").getAsString());
+					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+			}
+			
+			if (obj.get("created_at_start") != null)
+			{
+					
+					finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, obj.get("created_at_start").getAsString());
+					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+			}
+			
+			if (obj.get("creted_at_finish") != null)
+			{
+					
+					finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, obj.get("created_at_finish").getAsString());
+					
+			}
+			
+			
 			
 			ClickStreamEvent event = null;
 			while (true) 

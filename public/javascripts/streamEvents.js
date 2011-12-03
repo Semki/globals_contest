@@ -12,7 +12,7 @@ $(document).ready(function () {
 	$("#apply_filter").click(function () {
 		var filter = {"elementType": $('#element_type').val(), "elementId": $('#element_id').val(), "elementClass": $('#element_class').val(),
 				"created_at_start":$('#datepicker1').val(),
-				"creted_at_finish":$('#datepicker2').val()};
+				"created_at_finish":$('#datepicker2').val()};
 		
 		requestData(filter);
 		
