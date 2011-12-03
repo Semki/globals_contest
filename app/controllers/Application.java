@@ -16,22 +16,29 @@ public class Application extends Controller {
         render();
     }
     
-    public static void addEvent(String json) {
+    public static void addEvent(JsonObject body) {
     	
+    	ClickStreamEvent e = handleJsonAsObject(body);
+    	if (e== null)
+    	{
+    		//render("Empty!!!");
+    		render(body);
+    		// add error message
+    		return;
+    	}
     	
-    	ClickStreamEvent event = getObject(json);
-    	event.Save();
-    	
-        //render();
+    	e.Save(); 
     }
+  
+    public static void handleJson(JsonObject body) 
+    {        
+    	renderText(body.getAsJsonPrimitive("name").getAsString());    
+    }        
     
- 
-    public static ClickStreamEvent getObject(String json_string)
-    {
-    	Gson gson = new Gson();
-    	ClickStreamEvent obj = gson.fromJson(json_string, ClickStreamEvent.class);
-     	return obj;
-    	
+    public static ClickStreamEvent handleJsonAsObject(JsonObject body) 
+    {        
+    	ClickStreamEvent e = new Gson().fromJson(body, ClickStreamEvent.class);        
+    	return e; 
     }
 
 }
