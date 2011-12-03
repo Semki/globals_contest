@@ -27,7 +27,7 @@ public class Application extends Controller {
     		// add error message
     		return;
     	}
-    	e.SessionId = Session.current().getId();
+    	e.sessionId = Session.current().getId();
    
     	e.Save(); 
     } 
