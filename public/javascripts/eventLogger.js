@@ -10,7 +10,7 @@ $(document).ready(function() {
 				           "elementId": c.id, 
 				           "elementClass": c.className };
 		
-		$.post("/Application/addEvent", eventObject, function(data) {
+		$.post("/addEvent", eventObject, function(data) {
 	        
 	    });
 	});
