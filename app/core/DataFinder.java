@@ -2,6 +2,8 @@ package core;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +19,8 @@ public class DataFinder {
 	
 	ArrayList<Long> ids = null;
 	
+	OrderById order = OrderById.Asc;
+	
 	int currentPosition = 0;
 	
 	int top = -1;
@@ -31,6 +35,11 @@ public class DataFinder {
 		LessOrEqual;
 	}
 	
+	public enum OrderById {
+		Asc,
+		Desc;
+	}
+	
 	private class ConditionItem
 	{
 		String field;
@@ -42,6 +51,12 @@ public class DataFinder {
 			this.condition = condition;
 			this.value = value;
 		}
+	}
+	
+	public DataFinder OrderByIdDesc()
+	{
+		order = OrderById.Desc;
+		return this;
 	}
 	
 	public DataFinder(Class searchClass) throws IllegalArgumentException {
@@ -105,6 +120,24 @@ public class DataFinder {
 			ArrayList<Long> conditionIds = generateIdsForCondition(item);
 			intersect(conditionIds);
 		}
+		
+		if (order == OrderById.Asc)
+		{
+			Collections.sort(ids, new Comparator<Long>() {
+				public int compare(Long o1, Long o2) {
+					return o1.compareTo(o2);
+				}
+			} );
+		}
+		else
+		{
+			Collections.sort(ids, new Comparator<Long>() {
+				public int compare(Long o1, Long o2) {
+					return o2.compareTo(o1);
+				}
+			} );
+		}
+		
 	}
 	
 	private ArrayList<Long> generateFullIds()
