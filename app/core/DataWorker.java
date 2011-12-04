@@ -155,39 +155,7 @@ public class DataWorker {
     			node.kill(annotation.IndexName(), ConvertValueForIndexing(field.get(obj).toString()), obj.Id);
     	}
     }
-        
-    public void SetNodeSubscriptField(Field field, Persistent obj, NodeReference node)
-    {
-    	Long Id = obj.Id;
-    	String fieldName = field.getName();
-    	try {
-			Object fieldValue = field.get(obj);
-			 if (fieldValue instanceof java.lang.String)
-			 {
-			     node.set(fieldValue.toString(), Id, fieldName);
-			 }
-			 else if (fieldValue instanceof java.lang.Long)
-		     {
-		         long longValue = field.getLong(obj);
-		         node.set(longValue, Id, fieldName);
-		     }
-		     else if (fieldValue instanceof java.util.Date)
-		     {
-	             Date dateValue = (Date)  fieldValue;
-	             String strValue = dateValue.toGMTString();
-	             node.set(strValue, obj.Id, fieldName);
-	         }
-	    } 
-    	//catch ( IllegalArgumentException | IllegalAccessException e)
-    	catch(Exception e) 
-    	{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.WriteToFile(e.getMessage(), true);
-		}
 
-    
-    }
     
     public Persistent SaveObject(Persistent obj) throws IllegalAccessException
     {
@@ -223,7 +191,6 @@ public class DataWorker {
         { 
         	field = fields[i];
             FieldSetter.SetFieldValue(obj, field, node);
-            //SetNodeSubscriptField(field, obj, node);
             UpdateIndexForField(obj, field, oldObj);
         }
         return obj;
@@ -260,7 +227,6 @@ public class DataWorker {
             {
                field = fieldsMap.get(subscript);
                nodeValue = node.getObject(subscript);
-               //System.out.println("obj is "+obj+" field is "+field + "nodevalue is " + nodeValue+ " subscript is " + subscript + " node is "+ node);
                FieldGetter.GetFieldValue(obj, field, nodeValue, subscript, node);
             }
          }while (subscript.length() > 0);
