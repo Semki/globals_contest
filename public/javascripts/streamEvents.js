@@ -77,8 +77,8 @@ getFilterObject = function () {
 	return {"elementType": $('#element_type').val(), 
 		    "elementId": $('#element_id').val(), 
 		    "elementClass": $('#element_class').val(),
-		    "created_at_start":$('#datepicker1').val(),
-		    "created_at_finish":$('#datepicker2').val()};
+		    "createdAtStart":$('#datepicker1').val(),
+		    "createdAtFinish":$('#datepicker2').val()};
 };
 
 
