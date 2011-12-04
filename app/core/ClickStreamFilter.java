@@ -10,4 +10,6 @@ public class ClickStreamFilter {
 	public String createdAtStart;
 	
 	public String createdAtFinish;
+	
+	public String sessionId;
 }

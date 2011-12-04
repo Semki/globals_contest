@@ -91,6 +91,11 @@ public class StreamEvents extends Controller {
 				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish);
 			}
 			
+			if (!filter.sessionId.isEmpty())
+			{
+				finder.Where("sessionId", filter.sessionId);
+			}
+			
 			ClickStreamEvent event = null;
 			while (true) 
 			{
