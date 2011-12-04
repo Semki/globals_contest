@@ -146,4 +146,17 @@ public class StreamEvents extends Controller {
 		renderJSON(results);
 	}
 	
+	
+	public static void getTopTenElements() 
+	{
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		if (results.size() == 0)
+		{
+		
+			renderJSON("[]");
+			return;
+		}
+		renderJSON(results);
+	}
+	
 }
