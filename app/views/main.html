@@ -18,21 +18,9 @@
 	        <div class="container">
 	          <a class="brand" href="#">Clickstream globals monitor</a>
 	          <ul class="nav">
-				<li>#{a @Application.index()}"Click me" app#{/a}</li>
-	            <li #{if currentController=="Application"}class="selected" #{/if} >#{a @StreamEvents.index()}Monitor#{/a}</li>
-		
-	            <!-- 
-	            <li><a href="#about">About</a></li>
-	            <li><a href="#contact">Contact</a></li>
-	             -->
-	          </ul>
-	          <!-- 
-	          <form action="" class="pull-right">
-	            <input class="input-small" type="text" placeholder="Username">
-	            <input class="input-small" type="password" placeholder="Password">
-	            <button class="btn" type="submit">Sign in</button>
-	          </form>
-	           -->
+				<li #{if request.action == "Application.index"} class="active" #{/if}>#{a @Application.index()}"Click me" app#{/a}</li>
+	            <li #{if request.action == "StreamEvents.index"} class="active" #{/if} >#{a @StreamEvents.index()}Monitor#{/a}</li>
+	          </ul>        
 	        </div>
 	      </div>
 	    </div>
