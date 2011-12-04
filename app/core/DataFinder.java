@@ -111,6 +111,8 @@ public class DataFinder {
 	
 	public int Count()
 	{
+		if (ids == null)
+			initSearch();
 		return ids.size();
 	}
 	
@@ -137,7 +139,6 @@ public class DataFinder {
 		}
 		if (order == OrderById.Asc)
 		{
-			
 			Collections.sort(ids, new Comparator<Long>() {
 				public int compare(Long o1, Long o2) {
 					return o1.compareTo(o2);
@@ -146,7 +147,6 @@ public class DataFinder {
 		}
 		else
 		{
-			
 			Collections.sort(ids, new Comparator<Long>() {
 				public int compare(Long o1, Long o2) {
 					return o2.compareTo(o1);
