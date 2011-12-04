@@ -332,7 +332,12 @@ public class DataFinder {
 		} );
 		
 		int maxCount = Math.min(idsCount.size(), top);
-		return idsCount.subList(0, maxCount);
+		List<ElementCount> list = idsCount.subList(0, maxCount);
+		for (ElementCount elem : list)
+		{
+			elem.elementId = elem.elementId.substring(1);
+		}
+		return list;
 	}
 
 	/*
