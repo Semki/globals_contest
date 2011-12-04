@@ -12,6 +12,22 @@ $(document).ready(function () {
 		clearFilter();
 	});
 	
+	$("#real_time_mode_checkbox").removeAttr("checked");
+	
+	$("#real_time_mode_checkbox").click(function () {
+		if (this.checked)
+		{
+			$("#filter_tr").hide();
+			$('#buttons_cell').hide();
+		}
+		else
+		{
+			$('#filter_tr').show();
+			$('#buttons_cell').show();
+		}
+		
+	});
+	
 });
 
 clearFilter = function () {

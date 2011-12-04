@@ -8,6 +8,8 @@ import support.LogWriter;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -16,6 +18,7 @@ import com.google.gson.JsonObject;
 import core.ClickStreamFilter;
 import core.DataFinder;
 import core.DataFinder.ConditionTypes;
+import core.DataWorker;
 
 import models.*;
 
@@ -107,4 +110,35 @@ public class StreamEvents extends Controller {
 		renderJSON(array);
 		
 	}
+	
+	public static void getAddedEvents(String sid) 
+	{        
+		long id = Long.parseLong(sid);
+		DataFinder finder = new DataFinder(ClickStreamEvent.class);
+		ArrayList<Long> ids = finder.getAddedIdsSinceId(id);
+		ClickStreamEvent event = new ClickStreamEvent();
+		ArrayList<ClickStreamEvent> results = new ArrayList<ClickStreamEvent>();
+		
+		for (int i = ids.size()-1; i>=0; i--)
+		{
+			 ids.remove(i);
+			 try {
+				event = (ClickStreamEvent) DataWorker.Instance().LoadObjectById(ids.get(i), event);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			results.add(event);
+			
+		}
+		
+		if (results.size() == 0)
+		{
+		
+			renderJSON("[]");
+			return;
+		}
+		renderJSON(results);
+	}
+	
 }

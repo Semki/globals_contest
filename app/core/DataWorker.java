@@ -21,7 +21,6 @@ public class DataWorker {
     private String SchemaClassName;
     
     private static DataWorker dataWorker;
-    private LogWriter log;
     private Connection connection;
     public static DataWorker Instance()
     {
@@ -51,11 +50,7 @@ public class DataWorker {
     public static DataWorker Init()
     {
     	DataWorker worker = new DataWorker();
-    	worker.log = new LogWriter();
-    	worker.log.FileName = "c:\\temp\\javaLog.txt";
-    	
     	worker.connection = ConnectionManager.Instance().getConnection();
-         
     	return worker;
     }
     
@@ -84,8 +79,7 @@ public class DataWorker {
         }
         catch (Exception ex)
         {
-            log.WriteToFile(ex.toString(), true);
-            //throw ex;
+           ex.printStackTrace();
         }
         
         if (oldObj != null)
@@ -167,8 +161,7 @@ public class DataWorker {
         }
         catch (Exception ex)
         {
-            log.WriteToFile(ex.toString(), true);
-            //throw ex;
+        	ex.printStackTrace();
         }
         
         Persistent oldObj = null;

@@ -272,5 +272,23 @@ public class DataFinder {
 	}
 	
 	
+	public ArrayList<Long> getAddedIdsSinceId(long Id)
+	{
+		ArrayList<Long> results = new ArrayList<Long>();
+		NodeReference node = DataWorker.GetNodeReference(DataWorker.GetDataGlobalName(searchClass));
+		Long key = Id;
+		while (true)
+		{
+			String strKey = node.nextSubscript(key);
+			if (strKey.equals(""))
+				break;
+			key = Long.parseLong(strKey);
+			results.add(key);
+		}
+		
+		return results;
+	}
+	
+	
 
 }
