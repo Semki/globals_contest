@@ -126,14 +126,15 @@ public class DataWorker {
     	else if (value instanceof Date)
     	{
     		Date val = (Date) value;
-    		//Calendar calend = val. 
-    		return value.toString();
+    		return " ".concat(DateHelper.DateToString(val));
     	}
     	else
     	{
     		return value;
     	}
     }
+    
+    
     
     public void UpdateIndicesOnUpdate(Persistent oldObj, Persistent obj)
     {
