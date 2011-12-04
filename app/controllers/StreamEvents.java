@@ -61,7 +61,7 @@ public class StreamEvents extends Controller {
 			
 			if (!obj.isJsonObject())
 				return;
-			
+			/*
 			Boolean found = false;
 			if (obj.get("elementType") != null)
 			{
@@ -96,7 +96,7 @@ public class StreamEvents extends Controller {
 					
 					finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, obj.get("created_at_finish").getAsString());
 					
-			}
+			}*/
 			
 			
 			
