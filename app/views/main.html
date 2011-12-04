@@ -20,6 +20,7 @@
 	          <ul class="nav">
 				<li #{if request.action == "Application.index"} class="active" #{/if}>#{a @Application.index()}"Click me" app#{/a}</li>
 	            <li #{if request.action == "StreamEvents.index"} class="active" #{/if} >#{a @StreamEvents.index()}Monitor#{/a}</li>
+	            <li #{if request.action == "StreamEvents.statistics"} class="active" #{/if} >#{a @StreamEvents.statistics()}Statistics#{/a}</li>
 	          </ul>        
 	        </div>
 	      </div>

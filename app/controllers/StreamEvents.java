@@ -28,6 +28,10 @@ public class StreamEvents extends Controller {
 		render();
 	}
 	
+	public static void statistics() {
+		render();
+	}
+	
 	public static void addEvent(JsonObject body) {
 	    	
 	    	ClickStreamEvent e = handleJsonAsObject(body);
