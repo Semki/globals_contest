@@ -2,6 +2,8 @@ $(document).ready(function () {
 	
 	initFilter();
 	
+
+	
 	requestData(getFilterObject());
 	
 	$("#apply_filter").click(function () {
@@ -80,9 +82,23 @@ getFilterObject = function () {
 	return {"elementType": $('#element_type').val(), 
 		    "elementId": $('#element_id').val(), 
 		    "elementClass": $('#element_class').val(),
-		    "createdAtStart":$('#datepicker1').val(),
-		    "createdAtFinish":$('#datepicker2').val()};
+		    "createdAtStart":prepareStartDate($('#datepicker1').val()),
+		    "createdAtFinish":prepareFinishDate($('#datepicker2').val())};
 };
+
+prepareStartDate = function(val) {
+	if (val.length > 0){
+		return val.substr(0, val.length - 1) + ":00";
+	}
+	return val;
+}
+
+prepareFinishDate = function(val) {
+	if (val.length > 0){
+		return val.substr(0, val.length - 1) + ":59";
+	}
+	return val;
+}
 
 prependData = function (data) {
 	for (var i in data)
@@ -96,7 +112,8 @@ prependData = function (data) {
 				data[i].elementId + '</td><td>' + 
 				data[i].elementClass + '</td><td><span class="gray">&lt;</span>' + 
 				data[i].elementType + '<span class="gray">&gt;</span></td><td>' + 
-				data[i].CreatedOn + '</td></tr>').insertAfter("#events_table tr:first-child");
+				data[i].CreatedOn + '</td><td>' +
+				data[i].sessionId + '</td></tr>').insertAfter("#events_table tr:first-child");
 	}
 };
 
@@ -113,5 +130,6 @@ iterateData = function (data) {
 		$("#events_table tr:last-child").append('<td>' + data[i].elementClass + '</td>');
 		$("#events_table tr:last-child").append('<td><span class="gray">&lt;</span>' + data[i].elementType + '<span class="gray">&gt;</span></td>');
 		$("#events_table tr:last-child").append('<td>' + data[i].CreatedOn + '</td>');
+		$("#events_table tr:last-child").append('<td>' + data[i].sessionId + '</td>');
 	}
 };
