@@ -69,6 +69,7 @@ initFilter = function () {
 
 requestData = function (filter) {
 	$.post("streamevents/find", JSON.stringify(filter),function (data) {
+		clearTable();
 		iterateData(data);
 	}, "json");
 };
@@ -83,7 +84,6 @@ getFilterObject = function () {
 
 
 iterateData = function (data) {
-	clearTable();
 	for (var i in data)
 	{
 		if (data[i].Id > lastElementId)
