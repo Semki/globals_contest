@@ -16,9 +16,11 @@
 	    <div class="topbar">
 	      <div class="fill">
 	        <div class="container">
-	          <a class="brand" href="#">Clickstream monitor</a>
+	          <a class="brand" href="#">Clickstream globals monitor</a>
 	          <ul class="nav">
-	            <li class="active"><a href="#">Home</a></li>
+				<li>#{a @Application.index()}"Click me" app#{/a}</li>
+	            <li #{if currentController=="Application"}class="selected" #{/if} >#{a @StreamEvents.index()}Monitor#{/a}</li>
+		
 	            <!-- 
 	            <li><a href="#about">About</a></li>
 	            <li><a href="#contact">Contact</a></li>

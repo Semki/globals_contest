@@ -3,7 +3,10 @@
 # ~~~~
 
 # Home page
-GET     /                                       StreamEvents.index
+GET     /                                       Application.index
+
+GET		/monitor								StreamEvents.index
+
 POST /find		StreamEvents.Find
 
 POST /addEvent	StreamEvents.addEvent
