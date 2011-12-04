@@ -64,27 +64,27 @@ public class StreamEvents extends Controller {
 		{
 			if (!filter.elementType.isEmpty())
 			{
-				finder = finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
+				finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
 			}
 			
 			if (!filter.elementId.isEmpty())
 			{
-				finder = finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
+				finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
 			}
 			
 			if (!filter.elementClass.isEmpty())
 			{
-				finder = finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
+				finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
 			}
 			
 			if (!filter.createdAtStart.isEmpty())
 			{
-				finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
+				finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
 			}
 			
 			if (!filter.createdAtFinish.isEmpty())
 			{
-				finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
+				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
 			}
 			
 			ClickStreamEvent event = null;
