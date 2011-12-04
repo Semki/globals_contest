@@ -294,6 +294,8 @@ public class DataFinder {
 	public ArrayList<Long> getIndexValueCounts(String IndexName)
 	{
 		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
+		HashMap<String, Integer> idsCount = new HashMap<String, Integer>();
+		
 		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
 		while (true)
