@@ -282,12 +282,55 @@ public class DataFinder {
 			String strKey = node.nextSubscript(key);
 			if (strKey.equals(""))
 				break;
+			System.out.println(" key: "+key);
 			key = Long.parseLong(strKey);
 			results.add(key);
 		}
 		
 		return results;
 	}
+	
+	
+	public ArrayList<Long> getIndexValueCounts(String IndexName)
+	{
+		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
+		ArrayList<Long> results = new ArrayList<Long>();
+		String key = "";
+		while (true)
+		{
+			key = node.nextSubscript(IndexName, key);
+			if (key.equals(""))
+				break;
+			
+			String key2 = "";
+			int count = 0;
+			while(true)
+			{
+				key2 = node.nextSubscript(IndexName, key, key2);
+				if (key2.equals(""))
+					break;
+				count ++;
+			}
+		}
+		return results;
+	}
+	/*
+	public ArrayList<Long> getIndexValueCounts2(String IndexName) throws NoSuchFieldException, SecurityException, IllegalArgumentException
+	{
+		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
+		ArrayList<Long> results = new ArrayList<Long>();
+		String key = "";
+		while (true)
+		{
+			key = node.nextSubscript(IndexName, key);
+			if (key.equals(""))
+				break;
+			System.out.println("key = '" + key + "' convert '" +  DataWorker.ConvertValueForIndexing(key)+"'");
+			System.out.println(new DataFinder(searchClass).Where("elementId", key).Count());
+		}
+		return results;
+	}
+	*/
 	
 	
 
