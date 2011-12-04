@@ -25,6 +25,7 @@ public class ClickStreamEvent extends Persistent {
 	@Index(IndexName="timeStampIndex")
 	public String timeStamp;
 	
+	// In SessionId IP address will be written.
 	@Index(IndexName="sessionIdIndex")
 	public String sessionId;
 	
