@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateHelper {
 	private static String DateFormatString = "yyyy-MM-dd HH:mm:ss";
@@ -12,6 +13,7 @@ public class DateHelper {
 		if (dateValue == null)
 			return "";
     	DateFormat df = new SimpleDateFormat(DateFormatString);
+    	df.setTimeZone(TimeZone.getTimeZone("Asia/Irkutsk"));
     	return df.format(dateValue);
 	}
 	
