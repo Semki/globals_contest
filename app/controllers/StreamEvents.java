@@ -83,13 +83,11 @@ public class StreamEvents extends Controller {
 			
 			if (!filter.createdAtStart.isEmpty())
 			{
-				System.out.println("filter.createdAtStart " + filter.createdAtStart);
 				finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart);
 			}
 			
 			if (!filter.createdAtFinish.isEmpty())
 			{
-				System.out.println("filter.createdAtFinish " + filter.createdAtFinish);
 				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish);
 			}
 			

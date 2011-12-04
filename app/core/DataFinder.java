@@ -95,13 +95,11 @@ public class DataFinder {
 	
 	void addCondition(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
 	{
-		System.out.println("FIELD "+field);
 		Field searchField = searchClass.getField(field);
 		Index annotation = searchField.getAnnotation(Index.class);
 		if (annotation == null)
 			throw new IllegalArgumentException(field);
 		
-		System.out.println("val = " + value.toString() + " index " + DataWorker.ConvertValueForIndexing(value));
 		conditions.add(new ConditionItem(annotation.IndexName(), condition, DataWorker.ConvertValueForIndexing(value)));
 	}
 	
@@ -201,7 +199,6 @@ public class DataFinder {
 	{
 		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
-		System.out.println(value.toString());
 		while (true)
 		{
 			key = node.nextSubscript(indexName, value, key);
@@ -289,7 +286,6 @@ public class DataFinder {
 			String strKey = node.nextSubscript(key);
 			if (strKey.equals(""))
 				break;
-			System.out.println(" key: "+key);
 			key = Long.parseLong(strKey);
 			ids.add(key);
 		}

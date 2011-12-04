@@ -80,9 +80,23 @@ getFilterObject = function () {
 	return {"elementType": $('#element_type').val(), 
 		    "elementId": $('#element_id').val(), 
 		    "elementClass": $('#element_class').val(),
-		    "createdAtStart":$('#datepicker1').val(),
-		    "createdAtFinish":$('#datepicker2').val()};
+		    "createdAtStart":prepareStartDate($('#datepicker1').val()),
+		    "createdAtFinish":prepareFinishDate($('#datepicker2').val())};
 };
+
+prepareStartDate = function(val) {
+	if (val.length > 0){
+		return val.substr(0, val.length - 1) + ":00";
+	}
+	return val;
+}
+
+prepareFinishDate = function(val) {
+	if (val.length > 0){
+		return val.substr(0, val.length - 1) + ":59";
+	}
+	return val;
+}
 
 prependData = function (data) {
 	for (var i in data)
