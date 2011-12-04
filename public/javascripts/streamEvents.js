@@ -2,7 +2,7 @@ $(document).ready(function () {
 	
 	initFilter();
 	
-	requestData(null);
+	requestData(getFilterObject());
 	
 	$("#apply_filter").click(function () {
 		requestData(getFilterObject());	
@@ -31,12 +31,13 @@ getFilterObject = function () {
 
 
 iterateData = function (data) {
-	$('#events_table').html('');
+	$('#events_table').find("tr:gt(0)").remove();
 	for (var i in data)
 	{
 		$("#events_table").append('<tr></tr>');
-		$("#events_table tr:last-child").append('<td>' + data[i].Name + '</td');
-		$("#events_table tr:last-child").append('<td>&lt;' + data[i].elementType + '&gt;</td');
+		$("#events_table tr:last-child").append('<td>' + data[i].elementId + '</td');
+		$("#events_table tr:last-child").append('<td>' + data[i].elementClass + '</td');
+		$("#events_table tr:last-child").append('<td><span class="gray">&lt;</span>' + data[i].elementType + '<span class="gray">&gt;</span></td');
 		$("#events_table tr:last-child").append('<td>' + data[i].CreatedOn + '</td');
 	}
 };
