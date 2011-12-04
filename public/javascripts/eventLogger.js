@@ -24,7 +24,7 @@ $(document).ready(function() {
 		setInterval(function() {
 			if (!highloadMode) return;
 			$('.random_item:random').click();
-		}, 1000);
+		}, 300);
 		
 	});
 	
