@@ -1,4 +1,36 @@
+
 $(document).ready(function() {
+	
+	var highloadMode = false;
+	
+	jQuery.jQueryRandom = 0;
+	jQuery.extend(jQuery.expr[":"], {
+	    random: function(a, i, m, r) {
+	        if (i == 0) {
+	            jQuery.jQueryRandom = Math.floor(Math.random() * r.length);
+	        };
+	        return i == jQuery.jQueryRandom;
+	    }
+	});
+
+
+	$('#start_highload').click(function(){
+		
+		highloadMode = !highloadMode;
+		
+		if (highloadMode) {$('#start_highload').html("Stop Highload");}
+		else {$('#start_highload').html("Start Highload");}
+		
+		setInterval(function() {
+			if (!highloadMode) return;
+			$('.random_item:random').click();
+		}, 1000);
+		
+	});
+	
+
+
+	
 	$('body').delegate('*', 'click', function (e){
 		e.stopPropagation();
 		
