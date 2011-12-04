@@ -8,7 +8,19 @@ $(document).ready(function () {
 		requestData(getFilterObject());	
 	});
 	
+	$("#clear_filter").click(function () {
+		clearFilter();
+	});
+	
 });
+
+clearFilter = function () {
+	$('#element_type').val('');
+    $('#element_id').val('');
+    $('#element_class').val('');
+    $('#datepicker1').val('');
+    $('#datepicker2').val('');
+};
 
 initFilter = function () {
 	$("#datepicker1").datetimepicker({dateFormat: 'yy-mm-dd'});
