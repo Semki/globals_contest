@@ -19,16 +19,40 @@ $(document).ready(function () {
 		{
 			$("#filter_tr").hide();
 			$('#buttons_cell').hide();
+			goToRealTimeMode();
 		}
 		else
 		{
 			$('#filter_tr').show();
 			$('#buttons_cell').show();
+			removeRealTimeMode();
 		}
-		
 	});
 	
 });
+
+goToRealTimeMode = function () {
+	clearTable();
+	repeatedRequestsId = setInterval('realTimeAjax()', '2000');
+};
+
+removeRealTimeMode = function () {
+	clearInterval(repeatedRequestsId);
+};
+
+realTimeAjax = function () {
+	$.post("/getAddedEvents", JSON.stringify({"Id": lastElementId}), function (data) {
+		iterateData(data);
+	}, "json");
+};
+
+var repeatedRequestsId;
+
+var lastElementId = 0;
+
+clearTable = function () {
+	$('#events_table').find("tr:gt(0)").remove();
+};
 
 clearFilter = function () {
 	$('#element_type').val('');
@@ -45,6 +69,7 @@ initFilter = function () {
 
 requestData = function (filter) {
 	$.post("streamevents/find", JSON.stringify(filter),function (data) {
+		clearTable();
 		iterateData(data);
 	}, "json");
 };
@@ -59,9 +84,12 @@ getFilterObject = function () {
 
 
 iterateData = function (data) {
-	$('#events_table').find("tr:gt(0)").remove();
 	for (var i in data)
 	{
+		if (data[i].Id > lastElementId)
+		{
+			lastElementId = data[i].Id;
+		}
 		$("#events_table").append('<tr></tr>');
 		$("#events_table tr:last-child").append('<td>' + data[i].elementId + '</td');
 		$("#events_table tr:last-child").append('<td>' + data[i].elementClass + '</td');
