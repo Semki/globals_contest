@@ -1,13 +1,20 @@
 package core;
 
+import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import models.ElementCount;
+
+import org.eclipse.jdt.internal.core.ElementCache;
 
 import com.intersys.globals.NodeReference;
 
@@ -290,13 +297,12 @@ public class DataFinder {
 		return results;
 	}
 	
-	
-	public ArrayList<Long> getIndexValueCounts(String IndexName)
+	public List<ElementCount> getIndexValueCounts(String IndexName, int top)
 	{
-		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
-		HashMap<String, Integer> idsCount = new HashMap<String, Integer>();
 		
-		ArrayList<Long> results = new ArrayList<Long>();
+		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
+		ArrayList<ElementCount> idsCount = new ArrayList<ElementCount>();
+	
 		String key = "";
 		while (true)
 		{
@@ -313,9 +319,22 @@ public class DataFinder {
 					break;
 				count ++;
 			}
+			ElementCount elementCount = new ElementCount();
+			elementCount.count = (long) count;
+			elementCount.elementId = key;
+			idsCount.add(elementCount);
 		}
-		return results;
+		
+		Collections.sort(idsCount, new Comparator<ElementCount>() {
+			public int compare(ElementCount o1, ElementCount o2) {
+				return o2.count.compareTo(o1.count);
+			}
+		} );
+		
+		int maxCount = Math.min(idsCount.size(), top);
+		return idsCount.subList(0, maxCount);
 	}
+
 	/*
 	public ArrayList<Long> getIndexValueCounts2(String IndexName) throws NoSuchFieldException, SecurityException, IllegalArgumentException
 	{
