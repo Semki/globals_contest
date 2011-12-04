@@ -279,9 +279,9 @@ public class DataFinder {
 	}
 	
 	
-	public ArrayList<Long> getAddedIdsSinceId(long Id)
+	public DataFinder getAddedIdsSinceId(long Id)
 	{
-		ArrayList<Long> results = new ArrayList<Long>();
+		ids = new ArrayList<Long>();
 		NodeReference node = DataWorker.GetNodeReference(DataWorker.GetDataGlobalName(searchClass));
 		Long key = Id;
 		while (true)
@@ -291,10 +291,10 @@ public class DataFinder {
 				break;
 			System.out.println(" key: "+key);
 			key = Long.parseLong(strKey);
-			results.add(key);
+			ids.add(key);
 		}
 		
-		return results;
+		return this;
 	}
 	
 	public List<ElementCount> getIndexValueCounts(String IndexName, int top)

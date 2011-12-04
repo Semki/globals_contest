@@ -115,26 +115,23 @@ public class StreamEvents extends Controller {
 	{
 		String sid = body.getAsJsonPrimitive("Id").getAsString();  
 		long id = Long.parseLong(sid);
-		DataFinder finder = new DataFinder(ClickStreamEvent.class);
-		ArrayList<Long> ids = finder.getAddedIdsSinceId(id);
+		DataFinder finder = new DataFinder(ClickStreamEvent.class).getAddedIdsSinceId(id);
 		
 		ArrayList<ClickStreamEvent> results = new ArrayList<ClickStreamEvent>();
 		
-		for (int i = 0; i<ids.size(); i++)
+		while (true)
 		{
 			try 
 			{
-				ClickStreamEvent event = new ClickStreamEvent();
-				event = (ClickStreamEvent) DataWorker.Instance().LoadObjectById(ids.get(i), event);
+				ClickStreamEvent event = (ClickStreamEvent) finder.Next();
+				if (event == null) break;
 				results.add(event);
 			} 
-			catch (IllegalAccessException e) 
+			catch (Exception e) 
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
 		
 		if (results.size() == 0)
