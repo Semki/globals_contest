@@ -146,4 +146,20 @@ public class StreamEvents extends Controller {
 		renderJSON(results);
 	}
 	
+	
+	public static void getTopTenElements() 
+	{
+		DataFinder finder = new DataFinder(ClickStreamEvent.class);
+		
+		List<ElementCount> results = finder.getIndexValueCounts("elementIdIndex", 10);
+		
+		if (results.size() == 0)
+		{
+		
+			renderJSON("[]");
+			return;
+		}
+		renderJSON(results);
+	}
+	
 }
