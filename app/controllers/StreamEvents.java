@@ -68,27 +68,27 @@ public class StreamEvents extends Controller {
 		{
 			if (!filter.elementType.isEmpty())
 			{
-				finder = finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
+				finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
 			}
 			
 			if (!filter.elementId.isEmpty())
 			{
-				finder = finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
+				finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
 			}
 			
 			if (!filter.elementClass.isEmpty())
 			{
-				finder = finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
+				finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
 			}
 			
 			if (!filter.createdAtStart.isEmpty())
 			{
-				finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
+				finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
 			}
 			
 			if (!filter.createdAtFinish.isEmpty())
 			{
-				finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
+				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
 			}
 			
 			ClickStreamEvent event = null;
@@ -119,26 +119,23 @@ public class StreamEvents extends Controller {
 	{
 		String sid = body.getAsJsonPrimitive("Id").getAsString();  
 		long id = Long.parseLong(sid);
-		DataFinder finder = new DataFinder(ClickStreamEvent.class);
-		ArrayList<Long> ids = finder.getAddedIdsSinceId(id);
+		DataFinder finder = new DataFinder(ClickStreamEvent.class).getAddedIdsSinceId(id);
 		
 		ArrayList<ClickStreamEvent> results = new ArrayList<ClickStreamEvent>();
 		
-		for (int i = 0; i<ids.size(); i++)
+		while (true)
 		{
 			try 
 			{
-				ClickStreamEvent event = new ClickStreamEvent();
-				event = (ClickStreamEvent) DataWorker.Instance().LoadObjectById(ids.get(i), event);
+				ClickStreamEvent event = (ClickStreamEvent) finder.Next();
+				if (event == null) break;
 				results.add(event);
 			} 
-			catch (IllegalAccessException e) 
+			catch (Exception e) 
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
 		
 		if (results.size() == 0)
