@@ -1,13 +1,20 @@
 package core;
 
+import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import models.ElementCount;
+
+import org.eclipse.jdt.internal.core.ElementCache;
 
 import com.intersys.globals.NodeReference;
 
@@ -88,13 +95,11 @@ public class DataFinder {
 	
 	void addCondition(String field, ConditionTypes condition, Object value) throws NoSuchFieldException, SecurityException
 	{
-		System.out.println("FIELD "+field);
 		Field searchField = searchClass.getField(field);
 		Index annotation = searchField.getAnnotation(Index.class);
 		if (annotation == null)
 			throw new IllegalArgumentException(field);
 		
-		System.out.println("val = " + value.toString() + " index " + DataWorker.ConvertValueForIndexing(value));
 		conditions.add(new ConditionItem(annotation.IndexName(), condition, DataWorker.ConvertValueForIndexing(value)));
 	}
 	
@@ -194,7 +199,6 @@ public class DataFinder {
 	{
 		ArrayList<Long> results = new ArrayList<Long>();
 		String key = "";
-		System.out.println(value.toString());
 		while (true)
 		{
 			key = node.nextSubscript(indexName, value, key);
@@ -272,9 +276,9 @@ public class DataFinder {
 	}
 	
 	
-	public ArrayList<Long> getAddedIdsSinceId(long Id)
+	public DataFinder getAddedIdsSinceId(long Id)
 	{
-		ArrayList<Long> results = new ArrayList<Long>();
+		ids = new ArrayList<Long>();
 		NodeReference node = DataWorker.GetNodeReference(DataWorker.GetDataGlobalName(searchClass));
 		Long key = Id;
 		while (true)
@@ -282,21 +286,19 @@ public class DataFinder {
 			String strKey = node.nextSubscript(key);
 			if (strKey.equals(""))
 				break;
-			System.out.println(" key: "+key);
 			key = Long.parseLong(strKey);
-			results.add(key);
+			ids.add(key);
 		}
 		
-		return results;
+		return this;
 	}
 	
-	
-	public ArrayList<Long> getIndexValueCounts(String IndexName)
+	public List<ElementCount> getIndexValueCounts(String IndexName, int top)
 	{
-		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
-		HashMap<String, Integer> idsCount = new HashMap<String, Integer>();
 		
-		ArrayList<Long> results = new ArrayList<Long>();
+		NodeReference node = DataWorker.GetNodeReference(indexGlobal);
+		ArrayList<ElementCount> idsCount = new ArrayList<ElementCount>();
+	
 		String key = "";
 		while (true)
 		{
@@ -313,9 +315,27 @@ public class DataFinder {
 					break;
 				count ++;
 			}
+			ElementCount elementCount = new ElementCount();
+			elementCount.count = (long) count;
+			elementCount.elementId = key;
+			idsCount.add(elementCount);
 		}
-		return results;
+		
+		Collections.sort(idsCount, new Comparator<ElementCount>() {
+			public int compare(ElementCount o1, ElementCount o2) {
+				return o2.count.compareTo(o1.count);
+			}
+		} );
+		
+		int maxCount = Math.min(idsCount.size(), top);
+		List<ElementCount> list = idsCount.subList(0, maxCount);
+		for (ElementCount elem : list)
+		{
+			elem.elementId = elem.elementId.substring(1);
+		}
+		return list;
 	}
+
 	/*
 	public ArrayList<Long> getIndexValueCounts2(String IndexName) throws NoSuchFieldException, SecurityException, IllegalArgumentException
 	{

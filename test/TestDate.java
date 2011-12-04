@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.List;
+
 
 import com.intersys.globals.NodeReference;
 
 import models.ClickStreamEvent;
+import models.ElementCount;
 
 
 import core.ConnectionManager;
@@ -20,7 +23,12 @@ public class TestDate {
 		// TODO Auto-generated method stub
 		
 		DataFinder finder = new DataFinder(ClickStreamEvent.class);
-		finder.getAddedIdsSinceId(27l);
+		
+		for (ElementCount elem : finder.getIndexValueCounts("elementIdIndex", 10))
+		{
+			System.out.println(elem);
+			System.out.println(elem.count);
+		}
 		
 	}
 	

@@ -9,9 +9,13 @@ GET		/monitor								StreamEvents.index
 
 POST /find		StreamEvents.Find
 
+GET /statistics StreamEvents.statistics
+
 POST /addEvent	StreamEvents.addEvent
 
 POST /getAddedEvents StreamEvents.getAddedEvents
+
+GET /getTopTenElements StreamEvents.getTopTenElements
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
