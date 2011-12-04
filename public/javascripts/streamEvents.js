@@ -38,11 +38,13 @@ goToRealTimeMode = function () {
 
 removeRealTimeMode = function () {
 	clearInterval(repeatedRequestsId);
+	clearTable();
+	requestData(getFilterObject());	
 };
 
 realTimeAjax = function () {
 	$.post("/getAddedEvents", JSON.stringify({"Id": lastElementId}), function (data) {
-		iterateData(data);
+		prependData(data);
 	}, "json");
 };
 
@@ -82,6 +84,22 @@ getFilterObject = function () {
 		    "createdAtFinish":$('#datepicker2').val()};
 };
 
+prependData = function (data) {
+	for (var i in data)
+	{
+		if (data[i].Id > lastElementId)
+		{
+			lastElementId = data[i].Id;
+		}
+		
+		$('<tr><td>' + 
+				data[i].elementId + '</td><td>' + 
+				data[i].elementClass + '</td><td><span class="gray">&lt;</span>' + 
+				data[i].elementType + '<span class="gray">&gt;</span></td><td>' + 
+				data[i].CreatedOn + '</td></tr>').insertAfter("#events_table tr:first-child");
+	}
+};
+
 
 iterateData = function (data) {
 	for (var i in data)
@@ -92,8 +110,8 @@ iterateData = function (data) {
 		}
 		$("#events_table").append('<tr></tr>');
 		$("#events_table tr:last-child").append('<td>' + data[i].elementId + '</td');
-		$("#events_table tr:last-child").append('<td>' + data[i].elementClass + '</td');
-		$("#events_table tr:last-child").append('<td><span class="gray">&lt;</span>' + data[i].elementType + '<span class="gray">&gt;</span></td');
-		$("#events_table tr:last-child").append('<td>' + data[i].CreatedOn + '</td');
+		$("#events_table tr:last-child").append('<td>' + data[i].elementClass + '</td>');
+		$("#events_table tr:last-child").append('<td><span class="gray">&lt;</span>' + data[i].elementType + '<span class="gray">&gt;</span></td>');
+		$("#events_table tr:last-child").append('<td>' + data[i].CreatedOn + '</td>');
 	}
 };

@@ -121,7 +121,7 @@ public class StreamEvents extends Controller {
 		ClickStreamEvent event = new ClickStreamEvent();
 		ArrayList<ClickStreamEvent> results = new ArrayList<ClickStreamEvent>();
 		//System.out.println("Step2");
-		for (int i = ids.size()-1; i>=0; i--)
+		for (int i = 0; i<ids.size(); i++)
 		{
 			try 
 			{
