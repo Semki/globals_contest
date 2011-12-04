@@ -28,10 +28,10 @@ public String eventType;
  -->
 
 
-<h1>Here will be list of events</h1>
+<h1>List of clickstream events</h1>
 
 <table>
-<tr>
+<tr id="filter_tr">
 <td>
 	<form id="filter">
 		<fieldset>
@@ -82,17 +82,25 @@ public String eventType;
 </td>
 </tr>
 <tr>
-<td><button id="apply_filter" class="btn primary">Apply</button></td>
-<td></td>
+<td id="buttons_cell"><button id="apply_filter" class="btn primary">Apply</button><button id="clear_filter" class="btn">Clear</button></td>
+<td id="right_aligned_cell">
+	<label>
+		<input type="checkbox" name="optionsCheckboxes" value="option2" id="real_time_mode_checkbox" />
+		<span>Real-time mode</span>
+	</label>
+</td>
 </tr>
 </table>
 
 
 
 <table id="events_table">
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th>Created at</th>
-	</tr>
+	<tbody>
+		<tr>
+			<th>Id</th>
+			<th>Class</th>
+			<th>Type</th>
+			<th>Created at</th>
+		</tr>
+	</tbody>
 </table>

@@ -5,14 +5,20 @@ import play.mvc.*;
 import play.mvc.Scope.Session;
 import support.LogWriter;
 
+import java.lang.reflect.Field;
 import java.util.*;
+
+import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import core.ClickStreamFilter;
 import core.DataFinder;
 import core.DataFinder.ConditionTypes;
+import core.DataWorker;
 
 import models.*;
 
@@ -50,55 +56,36 @@ public class StreamEvents extends Controller {
 	
 	public static void Find(JsonObject body)
 	{
-		
-		JsonObject obj = body;
-		//System.out.println("body = "+ body + "obj " + obj);
+		ClickStreamFilter filter = new Gson().fromJson(body, ClickStreamFilter.class);
+
 		ArrayList<ClickStreamEvent> array = new ArrayList<ClickStreamEvent>();
 		DataFinder finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
 		try 
 		{
-			//System.out.println("obi is arr = "+ obj.isJsonArray()+ " and is obj " + obj.isJsonObject());
-			
-			if (!obj.isJsonObject())
-				return;
-			
-			Boolean found = false;
-			if (obj.get("elementType") != null)
+			if (!filter.elementType.isEmpty())
 			{
-					
-					finder = finder.Where("elementType", ConditionTypes.Equals, obj.get("elementType").getAsString());
-					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+				finder = finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
 			}
 			
-			if (obj.get("elementId") != null)
+			if (!filter.elementId.isEmpty())
 			{
-					
-					finder = finder.Where("elementId", ConditionTypes.Equals, obj.get("elementId").getAsString());
-					System.out.println("obj.get('elementId').toString() "+ obj.get("elementId").toString());
+				finder = finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
 			}
 			
-			if (obj.get("elementClass") != null)
+			if (!filter.elementClass.isEmpty())
 			{
-					
-					finder = finder.Where("elementClass", ConditionTypes.Equals, obj.get("elementClass").getAsString());
-					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+				finder = finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
 			}
 			
-			if (obj.get("created_at_start") != null)
+			if (!filter.createdAtStart.isEmpty())
 			{
-					
-					finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, obj.get("created_at_start").getAsString());
-					System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+				finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
 			}
 			
-			if (obj.get("creted_at_finish") != null)
+			if (!filter.createdAtFinish.isEmpty())
 			{
-					
-					finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, obj.get("created_at_finish").getAsString());
-					
+				finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
 			}
-			
-			
 			
 			ClickStreamEvent event = null;
 			while (true) 
@@ -123,4 +110,39 @@ public class StreamEvents extends Controller {
 		renderJSON(array);
 		
 	}
+	
+	public static void getAddedEvents(JsonObject body) 
+	{
+		String sid = body.getAsJsonPrimitive("Id").getAsString();  
+		long id = Long.parseLong(sid);
+		DataFinder finder = new DataFinder(ClickStreamEvent.class);
+		//System.out.println("Step1");
+		ArrayList<Long> ids = finder.getAddedIdsSinceId(id);
+		ClickStreamEvent event = new ClickStreamEvent();
+		ArrayList<ClickStreamEvent> results = new ArrayList<ClickStreamEvent>();
+		//System.out.println("Step2");
+		for (int i = ids.size()-1; i>=0; i--)
+		{
+			try 
+			{
+				event = (ClickStreamEvent) DataWorker.Instance().LoadObjectById(ids.get(i), event);
+			} 
+			catch (IllegalAccessException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			results.add(event);
+			
+		}
+		
+		if (results.size() == 0)
+		{
+		
+			renderJSON("[]");
+			return;
+		}
+		renderJSON(results);
+	}
+	
 }

@@ -11,6 +11,8 @@ POST /find		StreamEvents.Find
 
 POST /addEvent	StreamEvents.addEvent
 
+POST /getAddedEvents StreamEvents.getAddedEvents
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

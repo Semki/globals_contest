@@ -1,6 +1,9 @@
 package core;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -36,13 +39,14 @@ public class FieldSetter {
 			{
 				long longValue = field.getLong(obj);
 				node.set(longValue, Id, fieldName);
-			}
-			else if (fieldValue instanceof java.util.Date)
-			{
-				Date dateValue = (Date) fieldValue;
-				String strValue = dateValue.toGMTString();
-				node.set(strValue, obj.Id, fieldName);
-			}
+
+		    }
+		    else if (fieldValue instanceof java.util.Date)
+	        {
+		    	Date dateValue = (Date) fieldValue;
+		    	node.set(DateHelper.DateToString(dateValue), obj.Id, fieldName);
+	        }
+
 		}
 		catch (Exception e)
 		{
