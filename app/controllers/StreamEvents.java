@@ -37,13 +37,12 @@ public class StreamEvents extends Controller {
 	    	ClickStreamEvent e = handleJsonAsObject(body);
 	    	if (e== null)
 	    	{
-	    		//render("Empty!!!");
-	    		render(body);
-	    		// add error message
+	    		renderText("Null object was delivered!");
 	    		return;
 	    	}
-	    	e.sessionId = Session.current().getId();
-	   
+	    	// we don't need GUID  
+	    	//e.sessionId = Session.current().getId();
+	    	e.sessionId = request.remoteAddress;
 	    	e.Save(); 
 	    } 
 	  
