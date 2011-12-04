@@ -63,7 +63,7 @@ public class StreamEvents extends Controller {
 		ClickStreamFilter filter = new Gson().fromJson(body, ClickStreamFilter.class);
 
 		ArrayList<ClickStreamEvent> array = new ArrayList<ClickStreamEvent>();
-		DataFinder finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
+		DataFinder finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc().Top(1000);
 		try 
 		{
 			if (!filter.elementType.isEmpty())
@@ -83,12 +83,12 @@ public class StreamEvents extends Controller {
 			
 			if (!filter.createdAtStart.isEmpty())
 			{
-				finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
+				finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart);
 			}
 			
 			if (!filter.createdAtFinish.isEmpty())
 			{
-				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
+				finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish);
 			}
 			
 			ClickStreamEvent event = null;
