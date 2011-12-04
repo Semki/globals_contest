@@ -2,6 +2,8 @@ $(document).ready(function () {
 	
 	initFilter();
 	
+
+	
 	requestData(getFilterObject());
 	
 	$("#apply_filter").click(function () {
