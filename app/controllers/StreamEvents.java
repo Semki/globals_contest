@@ -149,7 +149,10 @@ public class StreamEvents extends Controller {
 	
 	public static void getTopTenElements() 
 	{
-		ArrayList<Integer> results = new ArrayList<Integer>();
+		DataFinder finder = new DataFinder(ClickStreamEvent.class);
+		
+		List<ElementCount> results = finder.getIndexValueCounts("elementIdIndex", 10);
+		
 		if (results.size() == 0)
 		{
 		
