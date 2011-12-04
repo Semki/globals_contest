@@ -83,7 +83,8 @@ getFilterObject = function () {
 		    "elementId": $('#element_id').val(), 
 		    "elementClass": $('#element_class').val(),
 		    "createdAtStart":prepareStartDate($('#datepicker1').val()),
-		    "createdAtFinish":prepareFinishDate($('#datepicker2').val())};
+		    "createdAtFinish":prepareFinishDate($('#datepicker2').val()),
+		    "sessionId": $("#session_id").val()};
 };
 
 prepareStartDate = function(val) {
