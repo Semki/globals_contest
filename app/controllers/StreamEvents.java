@@ -5,6 +5,7 @@ import play.mvc.*;
 import play.mvc.Scope.Session;
 import support.LogWriter;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import core.ClickStreamFilter;
 import core.DataFinder;
 import core.DataFinder.ConditionTypes;
 
@@ -51,59 +53,37 @@ public class StreamEvents extends Controller {
 	
 	public static void Find(JsonObject body)
 	{
-		
-		JsonObject obj = body;
-		JsonElement element = null;
-		//System.out.println("body = "+ body + "obj " + obj);
+		ClickStreamFilter filter = new Gson().fromJson(body, ClickStreamFilter.class);
+
 		ArrayList<ClickStreamEvent> array = new ArrayList<ClickStreamEvent>();
 		DataFinder finder = new DataFinder(ClickStreamEvent.class).OrderByIdDesc();
 		try 
 		{
-			//System.out.println("obi is arr = "+ obj.isJsonArray()+ " and is obj " + obj.isJsonObject());
-			
-			if (!obj.isJsonObject())
-				return;
-			
-			element = obj.get("elementType");
-			if (element != null && !element.getAsString().isEmpty())
+			if (!filter.elementType.isEmpty())
 			{
-					
-				finder = finder.Where("elementType", ConditionTypes.Equals, element.getAsString());
-				System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+				finder = finder.Where("elementType", ConditionTypes.Equals, filter.elementType);
 			}
 			
-			element = obj.get("elementId");
-			if (element != null && !element.getAsString().isEmpty())
+			if (!filter.elementId.isEmpty())
 			{
-					
-				finder = finder.Where("elementId", ConditionTypes.Equals, element.getAsString());
-				System.out.println("obj.get('elementType').toString() "+ obj.get("elementType").toString());
+				finder = finder.Where("elementId", ConditionTypes.Equals, filter.elementId);
 			}
 			
-			element = obj.get("elementClass");
-			if (element != null && !element.getAsString().isEmpty())
+			if (!filter.elementClass.isEmpty())
 			{
-					
-				finder = finder.Where("elementClass", ConditionTypes.Equals, element.getAsString());
-				System.out.println("obj.get('elementClass').toString() "+ obj.get("elementClass").toString());
+				finder = finder.Where("elementClass", ConditionTypes.Equals, filter.elementClass);
 			}
 			
-			element = obj.get("created_at_start");
-			if (element != null && !element.getAsString().isEmpty())
+			if (!filter.createdAtStart.isEmpty())
 			{
-					
-				finder = finder.Where("CreatedOn", ConditionTypes.Equals, element.getAsString());
-				System.out.println("obj.get('created_at_start').toString() "+ obj.get("created_at_start").toString());
+				finder = finder.Where("CreatedOn", ConditionTypes.GreaterOrEqual, filter.createdAtStart.substring(0, filter.createdAtStart.length()-1).concat(":00"));
 			}
 			
-			element = obj.get("creted_at_finish");
-			if (element != null && !element.getAsString().isEmpty())
+			if (!filter.createdAtFinish.isEmpty())
 			{
-				finder = finder.Where("CreatedOn", ConditionTypes.Equals, element.getAsString());
-				System.out.println("obj.get('creted_at_finish').toString() "+ obj.get("creted_at_finish").toString());
+				finder = finder.Where("CreatedOn", ConditionTypes.LessOrEqual, filter.createdAtFinish.substring(0, filter.createdAtFinish.length()-1).concat(":59"));
 			}
 			
-
 			ClickStreamEvent event = null;
 			while (true) 
 			{
